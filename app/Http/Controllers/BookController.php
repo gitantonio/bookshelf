@@ -14,7 +14,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with(['author', 'genres'])->paginate(15);
+        $books = Book::withIncludes(['author', 'genres'])
+            ->paginate(15);
 
         return BookResource::collection($books);
     }
@@ -42,7 +43,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        $book->load(['author', 'genres']);
+        $book->loadIncludes(['author', 'genres']);
 
         return new BookResource($book);
     }
