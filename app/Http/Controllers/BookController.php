@@ -14,7 +14,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::paginate(15);
+        $books = Book::with(['author', 'genres'])->paginate(15);
 
         return BookResource::collection($books);
     }
@@ -26,6 +26,12 @@ class BookController extends Controller
     {
         $book = Book::create($request->validated());
 
+        if ($request->has('genre_ids')) {
+            $book->genres()->sync($request->genre_ids);
+        }
+
+        $book->load(['author', 'genres']);
+
         return (new BookResource($book))
             ->response()
             ->setStatusCode(201);
@@ -36,6 +42,8 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        $book->load(['author', 'genres']);
+
         return new BookResource($book);
     }
 

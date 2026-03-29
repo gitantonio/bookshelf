@@ -30,6 +30,10 @@ class StoreBookRequest extends FormRequest
             'publication_year' => ['required', 'integer', 'min:1450', 'max:' . (date('Y') + 1)],
             'language' =>    ['sometimes', 'string', 'size:2'],
             'pages' =>       ['nullable', 'integer', 'min:1', 'max:10000'],
+
+            'author_id' =>   ['nullable', 'integer', 'exists:authors,id'],
+            'genre_ids' =>   ['sometimes', 'array'],
+            'genre_ids.*' => ['integer', 'exists:genres,id'],
         ];
     }
 }
