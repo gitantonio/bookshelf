@@ -42,5 +42,30 @@ class AppServiceProvider extends ServiceProvider
 
             return $this;
         });
+
+        Builder::macro('withSorting', function (
+            array $allowed,
+            string $default = '-created_at',
+            ?Request $request = null
+        ): Builder {
+            $request = $request ?? request();
+            $sortParam = $request->query('sort', $default);
+            $fields = explode(',', $sortParam);
+
+            foreach ($fields as $field) {
+                $direction = 'asc';
+
+                if (str_starts_with($field, '-')) {
+                    $direction = 'desc';
+                    $field = substr($field, 1);
+                }
+
+                if (in_array($field, $allowed)) {
+                    $this->orderBy($field, $direction);
+                }
+            }
+
+            return $this;
+        });
     }
 }
