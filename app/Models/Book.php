@@ -17,9 +17,20 @@ class Book extends Model
         'publication_year',
         'language',
         'pages',
+        'author_id',
     ];
 
     protected $attributes = [
         'language' => 'en',
     ];
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class);
+    }
 }

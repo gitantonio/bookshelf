@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,8 +23,11 @@ class BookFactory extends Factory
             'isbn' => fake()->isbn13(),
             'description' => fake()->paragraphs(2, true),
             'publication_year' => fake()->numberBetween(1950, 2026),
-            'language' => fake()->randomElement(['en', 'it', 'fr', 'es', 'de']),
+            'language' => fake()->randomElement(
+                ['en', 'it', 'fr', 'es', 'de']
+            ),
             'pages' => fake()->numberBetween(80, 800),
+            'author_id' => Author::factory(),
         ];
     }
 }

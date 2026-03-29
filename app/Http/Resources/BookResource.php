@@ -26,6 +26,14 @@ class BookResource extends JsonResource
             'language' => $this->language,
             'pages' => $this->pages,
             'is_recent' => ($this->publication_year >= now()->year - 2),
+
+            'author' => new AuthorResource(
+                $this->whenLoaded('author')
+            ),
+            'genres' => GenreResource::collection(
+                $this->whenLoaded('genres')
+            ),
+
             'created_at' => $this->created_at->toIso8601ZuluString(),
             'updated_at' => $this->updated_at->toIso8601ZuluString(),
         ];
