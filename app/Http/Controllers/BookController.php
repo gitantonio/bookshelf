@@ -15,6 +15,8 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Book::class);
+
         $perPage = (int) $request->query('per_page', 15);
         $perPage = min($perPage, 100);
 
@@ -57,7 +59,11 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        $book = Book::create($request->validated());
+        $this->authorize('create', Book::class);
+
+        $book = $request->user()->books()->create(
+            $request->validated()
+        );
 
         if ($request->has('genre_ids')) {
             $book->genres()->sync($request->genre_ids);
@@ -75,6 +81,8 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        $this->authorize('view', $book);
+
         $book->loadIncludes(['author', 'genres']);
 
         return new BookResource($book);
@@ -85,6 +93,8 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
+        $this->authorize('update', $book);
+
         $book->update($request->validated());
 
         return new BookResource($book);
@@ -95,6 +105,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        $this->authorize('delete', $book);
+
         $book->delete();
 
         return response()->json(null, 204);

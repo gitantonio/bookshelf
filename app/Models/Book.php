@@ -26,6 +26,11 @@ class Book extends Model
         'language' => 'en',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function author()
     {
         return $this->belongsTo(Author::class);
