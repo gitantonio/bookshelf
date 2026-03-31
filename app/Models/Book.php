@@ -22,6 +22,11 @@ class Book extends Model
         'author_id',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function author()
     {
         return $this->belongsTo(Author::class);

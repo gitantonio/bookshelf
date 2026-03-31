@@ -13,6 +13,8 @@ class AuthorController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Author::class);
+
         $authors = Author::paginate(15);
 
         return AuthorResource::collection($authors);
@@ -23,6 +25,8 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Author::class);
+
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -41,6 +45,8 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
+        $this->authorize('view', $author);
+
         return new AuthorResource($author);
     }
 
@@ -49,6 +55,8 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
+        $this->authorize('update', $author);
+
         $validated = $request->validate([
             'first_name' => ['sometimes', 'string', 'max:255'],
             'last_name' => ['sometimes', 'string', 'max:255'],
@@ -65,6 +73,12 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
+        $this->authorize('delete', $author);
+
+        if ($author->books()->exists()) {
+            abort(409, 'Cannot delete an author that has books.');
+        }
+
         $author->delete();
 
         return response()->json(null, 204);
