@@ -13,7 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->api(prepend: [
+            \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\ForceJsonResponse::class,
+        ]);
+
+        $middleware->api(append: [
+            'throttle:api',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

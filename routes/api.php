@@ -6,20 +6,15 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
-// auth
+// public (auth)
 Route::post('auth/register', [AuthController::class, 'register'])
+    ->middleware('throttle:auth')
     ->name('auth.register');
+
 Route::post('auth/login', [AuthController::class, 'login'])
+    ->middleware('throttle:auth')
     ->name('auth.login');
-Route::post('auth/logout', [AuthController::class, 'logout'])
-    ->middleware('auth:sanctum')
-    ->name('auth.logout');
-Route::post('auth/logout/all', [AuthController::class, 'logoutAll'])
-    ->middleware('auth:sanctum')
-    ->name('auth.logout-all');
-Route::get('auth/me', [AuthController::class, 'me'])
-    ->middleware('auth:sanctum')
-    ->name('auth.me');
+
 
 // public (reading)
 Route::get('books', [BookController::class, 'index'])
@@ -33,8 +28,16 @@ Route::get('authors/{author}', [AuthorController::class, 'show'])
 Route::get('authors/{author}/books', [AuthorBookController::class, 'index'])
     ->name('authors.books.index');
 
-// protected (writing)
+// protected (auth & writing)
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('auth/logout', [AuthController::class, 'logout'])
+        ->name('auth.logout');
+    Route::post('auth/logout/all', [AuthController::class, 'logoutAll'])
+        ->name('auth.logout-all');
+    Route::get('auth/me', [AuthController::class, 'me'])
+        ->name('auth.me');
+
     Route::post('books', [BookController::class, 'store'])
         ->name('books.store');
     Route::put('books/{book}', [BookController::class, 'update'])
