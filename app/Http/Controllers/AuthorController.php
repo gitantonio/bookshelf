@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\BusinessException;
 use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use Illuminate\Http\Request;
@@ -76,7 +77,9 @@ class AuthorController extends Controller
         $this->authorize('delete', $author);
 
         if ($author->books()->exists()) {
-            abort(409, 'Cannot delete an author that has books.');
+            throw new BusinessException(
+                'Cannot delete an author that has books.'
+            );
         }
 
         $author->delete();
