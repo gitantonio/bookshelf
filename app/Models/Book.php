@@ -20,6 +20,7 @@ class Book extends Model
         'language',
         'pages',
         'author_id',
+        'cover_path',
     ];
 
     public function user()
