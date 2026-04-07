@@ -34,6 +34,9 @@ class BookResource extends JsonResource
                 $this->whenLoaded('genres')
             ),
 
+            'average_rating' => round($this->average_rating, 2),
+            'reviews_count' => $this->reviews_count,
+
             'created_at' => $this->created_at->toIso8601ZuluString(),
             'updated_at' => $this->updated_at->toIso8601ZuluString(),
         ];

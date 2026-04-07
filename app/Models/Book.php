@@ -24,6 +24,8 @@ class Book extends Model
 
     protected $attributes = [
         'language' => 'en',
+        'average_rating' => 0,
+        'reviews_count' => 0,
     ];
 
     public function user()
@@ -39,5 +41,17 @@ class Book extends Model
     public function genres()
     {
         return $this->belongsToMany(Genre::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function updateRatingStats(): void
+    {
+        $this->average_rating = $this->reviews()->avg('rating') ?? 0;
+        $this->reviews_count = $this->reviews()->count();
+        $this->save();
     }
 }
