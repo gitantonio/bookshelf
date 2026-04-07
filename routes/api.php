@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorBookController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookCoverController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,11 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('books.update');
     Route::delete('books/{book}', [BookController::class, 'destroy'])
         ->name('books.destroy');
+
+    Route::post('books/{book}/cover', [BookCoverController::class, 'store'])
+        ->name('books.cover.store');
+    Route::delete('books/{book}/cover', [BookCoverController::class, 'destroy'])
+        ->name('books.cover.destroy');
 
     Route::post('books/{book}/reviews', [ReviewController::class, 'store'])
         ->name('books.reviews.store');

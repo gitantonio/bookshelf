@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class BookResource extends JsonResource
 {
@@ -33,6 +34,11 @@ class BookResource extends JsonResource
             'genres' => GenreResource::collection(
                 $this->whenLoaded('genres')
             ),
+
+            'cover_url' => ($this->cover_path)
+                ? Storage::disk(config('bookshelf.images_disk', 'public'))
+                    ->url($this->cover_path)
+                : null,
 
             'average_rating' => round($this->average_rating, 2),
             'reviews_count' => $this->reviews_count,
