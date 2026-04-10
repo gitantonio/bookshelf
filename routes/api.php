@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorBookController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookCoverController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,8 @@ Route::get('authors/{author}', [AuthorController::class, 'show'])
 Route::get('authors/{author}/books', [AuthorBookController::class, 'index'])
     ->name('authors.books.index');
 
+Route::get('genres', [GenreController::class, 'index'])
+    ->name('genres.index');
 
 
 // protected (auth & writing)
