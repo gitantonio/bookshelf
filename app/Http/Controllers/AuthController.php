@@ -8,8 +8,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @group Authentication
+ */
 class AuthController extends Controller
 {
+    /**
+     * @unauthenticated
+     */
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -36,6 +42,9 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /**
+     * @unauthenticated
+     */
     public function login(Request $request)
     {
         $validated = $request->validate([
@@ -65,6 +74,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @authenticated
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -72,6 +84,9 @@ class AuthController extends Controller
         return response()->json(null, 204);
     }
 
+    /**
+     * @authenticated
+     */
     public function logoutAll(Request $request)
     {
         $request->user()->tokens()->delete();
@@ -79,6 +94,9 @@ class AuthController extends Controller
         return response()->json(null, 204);
     }
 
+    /**
+     * @authenticated
+     */
     public function me(Request $request)
     {
         $user = $request->user();

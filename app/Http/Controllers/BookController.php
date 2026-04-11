@@ -8,10 +8,24 @@ use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
+/**
+ * @group Books
+ */
 class BookController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @unauthenticated
+     *
+     * @queryParam page integer Page number. Example: 1
+     * @queryParam per_page integer Results per page (max 100). Example: 15
+     * @queryParam sort string Sort field (prefix with `-` for descending). Example: -publication_year
+     * @queryParam include string Related resources to include (author, genres). Example: author,genres
+     * @queryParam language string Filter by language code. Example: en
+     * @queryParam year_from integer Minimum publication year. Example: 2000
+     * @queryParam year_to integer Maximum publication year. Example: 2026
+     * @queryParam author_id integer Filter by author ID. Example: 3
+     * @queryParam genre string Filter by genre slug. Example: fantasy
+     * @queryParam search string Search in title and description. Example: rose
      */
     public function index(Request $request)
     {
@@ -55,7 +69,7 @@ class BookController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @authenticated
      */
     public function store(StoreBookRequest $request)
     {
@@ -77,7 +91,9 @@ class BookController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @unauthenticated
+     *
+     * @queryParam include string Related resources to include (author, genres). Example: author,genres
      */
     public function show(Book $book)
     {
@@ -89,7 +105,7 @@ class BookController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @authenticated
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
@@ -101,7 +117,7 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @authenticated
      */
     public function destroy(Book $book)
     {
