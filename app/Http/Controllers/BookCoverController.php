@@ -8,6 +8,9 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @group Books
+ */
 class BookCoverController extends Controller
 {
     private Filesystem $disk;
@@ -19,6 +22,9 @@ class BookCoverController extends Controller
         );
     }
 
+    /**
+     * @authenticated
+     */
     public function store(Request $request, Book $book)
     {
         $this->authorize('update', $book);
@@ -48,6 +54,9 @@ class BookCoverController extends Controller
         return new BookResource($book);
     }
 
+    /**
+     * @authenticated
+     */
     public function destroy(Request $request, Book $book)
     {
         $this->authorize('update', $book);

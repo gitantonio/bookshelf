@@ -7,10 +7,16 @@ use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use Illuminate\Http\Request;
 
+/**
+ * @group Authors
+ */
 class AuthorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @unauthenticated
+     *
+     * @queryParam page integer Page number. Example: 1
+     * @queryParam per_page integer Results per page (max 100). Example: 15
      */
     public function index()
     {
@@ -22,7 +28,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @authenticated
      */
     public function store(Request $request)
     {
@@ -42,7 +48,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @unauthenticated
      */
     public function show(Author $author)
     {
@@ -52,7 +58,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @authenticated
      */
     public function update(Request $request, Author $author)
     {
@@ -70,7 +76,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @authenticated
      */
     public function destroy(Author $author)
     {

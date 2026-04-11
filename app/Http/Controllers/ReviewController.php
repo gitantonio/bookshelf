@@ -9,10 +9,16 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Reviews
+ */
 class ReviewController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @unauthenticated
+     *
+     * @queryParam page integer Page number. Example: 1
+     * @queryParam per_page integer Results per page (max 100). Example: 15
      */
     public function index(Book $book)
     {
@@ -27,7 +33,7 @@ class ReviewController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @authenticated
      */
     public function store(Request $request, Book $book)
     {
@@ -66,7 +72,7 @@ class ReviewController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @unauthenticated
      */
     public function show(Book $book, Review $review)
     {
@@ -78,7 +84,7 @@ class ReviewController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @authenticated
      */
     public function update(Request $request, Book $book, Review $review)
     {
@@ -101,7 +107,7 @@ class ReviewController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @authenticated
      */
     public function destroy(Request $request, Book $book, Review $review)
     {
