@@ -82,6 +82,12 @@ class BookController extends Controller
 
         $book->update($request->validated());
 
+        if ($request->has('genre_ids')) {
+            $book->genres()->sync($request->genre_ids);
+        }
+
+        $book->load(['author', 'publisher', 'genres']);
+
         return new BookResource($book);
     }
 
