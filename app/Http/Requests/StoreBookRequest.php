@@ -32,6 +32,7 @@ class StoreBookRequest extends FormRequest
             'pages' =>       ['nullable', 'integer', 'min:1', 'max:10000'],
 
             'author_id' =>   ['nullable', 'integer', 'exists:authors,id'],
+            'publisher_id' => ['nullable', 'integer', 'exists:publishers,id'],
             'genre_ids' =>   ['sometimes', 'array'],
             'genre_ids.*' => ['integer', 'exists:genres,id'],
         ];

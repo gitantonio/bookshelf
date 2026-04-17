@@ -31,6 +31,9 @@ class BookResource extends JsonResource
             'author' => new AuthorResource(
                 $this->whenLoaded('author')
             ),
+            'publisher' => new PublisherResource(
+                $this->whenLoaded('publisher')
+            ),
             'genres' => GenreResource::collection(
                 $this->whenLoaded('genres')
             ),

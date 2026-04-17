@@ -83,7 +83,7 @@ class BookController extends Controller
             $book->genres()->sync($request->genre_ids);
         }
 
-        $book->load(['author', 'genres']);
+        $book->load(['author', 'publisher', 'genres']);
 
         return (new BookResource($book))
             ->response()
@@ -99,7 +99,7 @@ class BookController extends Controller
     {
         $this->authorize('view', $book);
 
-        $book->loadIncludes(['author', 'genres']);
+        $book->loadIncludes(['author', 'publisher', 'genres']);
 
         return new BookResource($book);
     }

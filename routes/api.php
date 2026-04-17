@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookCoverController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,11 @@ Route::get('authors/{author}/books', [AuthorBookController::class, 'index'])
 
 Route::get('genres', [GenreController::class, 'index'])
     ->name('genres.index');
+
+Route::get('publishers', [PublisherController::class, 'index'])
+    ->name('publishers.index');
+Route::get('publishers/{publisher}', [PublisherController::class, 'show'])
+    ->name('publishers.show');
 
 
 // protected (auth & writing)
@@ -76,4 +82,11 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('authors.update');
     Route::delete('authors/{author}', [AuthorController::class, 'destroy'])
         ->name('authors.destroy');
+
+    Route::post('publishers', [PublisherController::class, 'store'])
+        ->name('publishers.store');
+    Route::put('publishers/{publisher}', [PublisherController::class, 'update'])
+        ->name('publishers.update');
+    Route::delete('publishers/{publisher}', [PublisherController::class, 'destroy'])
+        ->name('publishers.destroy');
 });
