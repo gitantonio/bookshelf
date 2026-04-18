@@ -15,18 +15,25 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
     /**
+     * List books
+     *
      * @unauthenticated
      *
      * @queryParam page integer Page number. Example: 1
      * @queryParam per_page integer Results per page (max 100). Example: 15
-     * @queryParam sort string Sort field (prefix with `-` for descending). Example: -publication_year
-     * @queryParam include string Related resources to include (author, genres). Example: author,genres
-     * @queryParam language string Filter by language code. Example: en
+     * @queryParam sort string Sort field (prefix with `-` for descending). Allowed: title, publication_year, created_at, pages. Example: -publication_year
+     * @queryParam include string Comma-separated related resources (author, publisher, genres). Example: author,genres
+     * @queryParam language string Filter by ISO 2-letter language code. Example: en
      * @queryParam year_from integer Minimum publication year. Example: 2000
      * @queryParam year_to integer Maximum publication year. Example: 2026
      * @queryParam author_id integer Filter by author ID. Example: 3
      * @queryParam genre string Filter by genre slug. Example: fantasy
      * @queryParam search string Search in title and description. Example: rose
+     *
+     * @apiResourceCollection App\Http\Resources\BookResource
+     * @apiResourceModel App\Models\Book paginate=15 with=author,publisher,genres
+     *
+     * @response 403 {"message":"This action is unauthorized."}
      */
     public function index(Request $request)
     {
@@ -38,7 +45,14 @@ class BookController extends Controller
     }
 
     /**
+     * Create a book
+     *
      * @authenticated
+     *
+     * @apiResource status=201 App\Http\Resources\BookResource
+     * @apiResourceModel App\Models\Book with=author,publisher,genres
+     *
+     * @response 422 scenario="Validation failed" {"message":"The isbn has already been taken.","errors":{"isbn":["The isbn has already been taken."]}}
      */
     public function store(StoreBookRequest $request)
     {
@@ -60,9 +74,16 @@ class BookController extends Controller
     }
 
     /**
+     * Show a book
+     *
      * @unauthenticated
      *
-     * @queryParam include string Related resources to include (author, genres). Example: author,genres
+     * @queryParam include string Comma-separated related resources (author, publisher, genres). Example: author,genres
+     *
+     * @apiResource App\Http\Resources\BookResource
+     * @apiResourceModel App\Models\Book with=author,publisher,genres
+     *
+     * @response 404 {"message":"No query results for model [App\\Models\\Book]."}
      */
     public function show(Book $book)
     {
@@ -74,7 +95,14 @@ class BookController extends Controller
     }
 
     /**
+     * Update a book
+     *
      * @authenticated
+     *
+     * @apiResource App\Http\Resources\BookResource
+     * @apiResourceModel App\Models\Book with=author,publisher,genres
+     *
+     * @response 403 {"message":"This action is unauthorized."}
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
@@ -92,7 +120,12 @@ class BookController extends Controller
     }
 
     /**
+     * Delete a book
+     *
      * @authenticated
+     *
+     * @response 204 {}
+     * @response 403 {"message":"This action is unauthorized."}
      */
     public function destroy(Book $book)
     {

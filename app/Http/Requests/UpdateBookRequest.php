@@ -43,4 +43,19 @@ class UpdateBookRequest extends FormRequest
             'genre_ids.*' => ['integer', 'exists:genres,id'],
         ];
     }
+
+    public function bodyParameters(): array
+    {
+        return [
+            'title' =>       ['description' => "The book's title.",                       'example' => 'The Name of the Rose (2nd ed.)'],
+            'isbn' =>        ['description' => 'A valid, unique ISBN-13.',                'example' => '9780156001311'],
+            'description' => ['description' => 'Free-form description (max 5000 chars).', 'example' => 'Updated description.'],
+            'publication_year' => ['description' => 'Year of publication.',               'example' => 1983],
+            'language' =>    ['description' => 'Two-letter ISO language code.',           'example' => 'en'],
+            'pages' =>       ['description' => 'Number of pages.',                        'example' => 520],
+            'author_id' =>   ['description' => "ID of the book's author.",                'example' => 3],
+            'publisher_id' => ['description' => "ID of the book's publisher.",            'example' => 7],
+            'genre_ids' =>   ['description' => 'Array of genre IDs to sync.',             'example' => [1, 4]],
+        ];
+    }
 }

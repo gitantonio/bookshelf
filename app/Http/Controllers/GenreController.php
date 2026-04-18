@@ -12,7 +12,14 @@ use Illuminate\Support\Facades\Cache;
 class GenreController extends Controller
 {
     /**
+     * List genres
+     *
+     * Returns every genre sorted alphabetically. Cached for one hour.
+     *
      * @unauthenticated
+     *
+     * @apiResourceCollection App\Http\Resources\GenreResource
+     * @apiResourceModel App\Models\Genre
      */
     public function index()
     {

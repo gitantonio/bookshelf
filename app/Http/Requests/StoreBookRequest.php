@@ -37,4 +37,19 @@ class StoreBookRequest extends FormRequest
             'genre_ids.*' => ['integer', 'exists:genres,id'],
         ];
     }
+
+    public function bodyParameters(): array
+    {
+        return [
+            'title' =>       ['description' => "The book's title.",                       'example' => 'The Name of the Rose'],
+            'isbn' =>        ['description' => 'A valid, unique ISBN-13.',                'example' => '9780156001311'],
+            'description' => ['description' => 'Free-form description (max 5000 chars).', 'example' => 'A historical murder mystery set in a medieval abbey.'],
+            'publication_year' => ['description' => 'Year of publication.',               'example' => 1980],
+            'language' =>    ['description' => 'Two-letter ISO language code.',           'example' => 'en'],
+            'pages' =>       ['description' => 'Number of pages.',                        'example' => 512],
+            'author_id' =>   ['description' => "ID of the book's author.",                'example' => 3],
+            'publisher_id' => ['description' => "ID of the book's publisher.",            'example' => 7],
+            'genre_ids' =>   ['description' => 'Array of genre IDs to attach.',           'example' => [1, 4]],
+        ];
+    }
 }

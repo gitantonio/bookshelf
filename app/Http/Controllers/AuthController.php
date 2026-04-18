@@ -14,7 +14,17 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
+     * Register a new user
+     *
      * @unauthenticated
+     *
+     * @bodyParam name string required The user's full name. Example: Jane Doe
+     * @bodyParam email string required Unique email address. Example: jane@example.com
+     * @bodyParam password string required The password. Example: Sup3rS3cret!
+     * @bodyParam password_confirmation string required Must match password. Example: Sup3rS3cret!
+     *
+     * @response 201 {"user":{"id":1,"name":"Jane Doe","email":"jane@example.com"},"token":"1|aBcDeFgHiJkLmNoPqRsTuVwXyZ"}
+     * @response 422 scenario="Validation failed" {"message":"The email has already been taken.","errors":{"email":["The email has already been taken."]}}
      */
     public function register(Request $request)
     {
@@ -43,7 +53,15 @@ class AuthController extends Controller
     }
 
     /**
+     * Log in an existing user
+     *
      * @unauthenticated
+     *
+     * @bodyParam email string required The user's email. Example: jane@example.com
+     * @bodyParam password string required The user's password. Example: Sup3rS3cret!
+     *
+     * @response 200 {"user":{"id":1,"name":"Jane Doe","email":"jane@example.com"},"token":"2|aBcDeFgHiJkLmNoPqRsTuVwXyZ"}
+     * @response 422 scenario="Invalid credentials" {"message":"The provided credentials are incorrect.","errors":{"email":["The provided credentials are incorrect."]}}
      */
     public function login(Request $request)
     {
@@ -75,7 +93,14 @@ class AuthController extends Controller
     }
 
     /**
+     * Log out (current token)
+     *
+     * Revokes the token used for this request.
+     *
      * @authenticated
+     *
+     * @response 204 {}
+     * @response 401 {"message":"Unauthenticated."}
      */
     public function logout(Request $request)
     {
@@ -85,7 +110,14 @@ class AuthController extends Controller
     }
 
     /**
+     * Log out from all devices
+     *
+     * Revokes every token belonging to the authenticated user.
+     *
      * @authenticated
+     *
+     * @response 204 {}
+     * @response 401 {"message":"Unauthenticated."}
      */
     public function logoutAll(Request $request)
     {
@@ -95,7 +127,12 @@ class AuthController extends Controller
     }
 
     /**
+     * Get the authenticated user
+     *
      * @authenticated
+     *
+     * @response 200 {"id":1,"name":"Jane Doe","email":"jane@example.com"}
+     * @response 401 {"message":"Unauthenticated."}
      */
     public function me(Request $request)
     {

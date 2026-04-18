@@ -15,10 +15,17 @@ use Illuminate\Support\Facades\DB;
 class ReviewController extends Controller
 {
     /**
+     * List reviews for a book
+     *
      * @unauthenticated
      *
      * @queryParam page integer Page number. Example: 1
      * @queryParam per_page integer Results per page (max 100). Example: 15
+     *
+     * @apiResourceCollection App\Http\Resources\ReviewResource
+     * @apiResourceModel App\Models\Review paginate=15 with=user
+     *
+     * @response 404 {"message":"No query results for model [App\\Models\\Book]."}
      */
     public function index(Book $book)
     {
@@ -33,7 +40,19 @@ class ReviewController extends Controller
     }
 
     /**
+     * Create a review
+     *
+     * A user can only leave one review per book.
+     *
      * @authenticated
+     *
+     * @bodyParam rating integer required Rating between 1 and 5. Example: 5
+     * @bodyParam body string Review text (max 2000). Example: An absolute masterpiece.
+     *
+     * @apiResource status=201 App\Http\Resources\ReviewResource
+     * @apiResourceModel App\Models\Review with=user
+     *
+     * @response 422 scenario="Already reviewed" {"message":"You have already reviewed this book."}
      */
     public function store(Request $request, Book $book)
     {
@@ -72,7 +91,14 @@ class ReviewController extends Controller
     }
 
     /**
+     * Show a review
+     *
      * @unauthenticated
+     *
+     * @apiResource App\Http\Resources\ReviewResource
+     * @apiResourceModel App\Models\Review with=user
+     *
+     * @response 404 {"message":"No query results for model [App\\Models\\Review]."}
      */
     public function show(Book $book, Review $review)
     {
@@ -84,7 +110,19 @@ class ReviewController extends Controller
     }
 
     /**
+     * Update a review
+     *
+     * Only editable within `bookshelf.review_edit_window_minutes` from creation.
+     *
      * @authenticated
+     *
+     * @bodyParam rating integer Rating between 1 and 5. Example: 4
+     * @bodyParam body string Review text (max 2000). Example: On reflection, I'd knock off one star.
+     *
+     * @apiResource App\Http\Resources\ReviewResource
+     * @apiResourceModel App\Models\Review with=user
+     *
+     * @response 422 scenario="Edit window expired" {"message":"Reviews can only be modified within 60 minutes of creation."}
      */
     public function update(Request $request, Book $book, Review $review)
     {
@@ -107,7 +145,14 @@ class ReviewController extends Controller
     }
 
     /**
+     * Delete a review
+     *
+     * Subject to the same edit window as updates.
+     *
      * @authenticated
+     *
+     * @response 204 {}
+     * @response 422 scenario="Edit window expired" {"message":"Reviews can only be modified within 60 minutes of creation."}
      */
     public function destroy(Request $request, Book $book, Review $review)
     {

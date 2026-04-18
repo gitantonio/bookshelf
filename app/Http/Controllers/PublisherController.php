@@ -13,10 +13,17 @@ use Illuminate\Http\Request;
 class PublisherController extends Controller
 {
     /**
+     * List publishers
+     *
      * @unauthenticated
      *
      * @queryParam page integer Page number. Example: 1
      * @queryParam per_page integer Results per page (max 100). Example: 15
+     *
+     * @apiResourceCollection App\Http\Resources\PublisherResource
+     * @apiResourceModel App\Models\Publisher paginate=15
+     *
+     * @response 403 {"message":"This action is unauthorized."}
      */
     public function index()
     {
@@ -28,7 +35,18 @@ class PublisherController extends Controller
     }
 
     /**
+     * Create a publisher
+     *
      * @authenticated
+     *
+     * @bodyParam name string required Publisher's name (max 255). Example: Bompiani
+     * @bodyParam country string required Publisher's country (max 100). Example: IT
+     * @bodyParam website string Website URL (max 255). Example: https://www.bompiani.it
+     *
+     * @apiResource status=201 App\Http\Resources\PublisherResource
+     * @apiResourceModel App\Models\Publisher
+     *
+     * @response 422 scenario="Validation failed" {"message":"The name field is required.","errors":{"name":["The name field is required."]}}
      */
     public function store(Request $request)
     {
@@ -48,7 +66,14 @@ class PublisherController extends Controller
     }
 
     /**
+     * Show a publisher
+     *
      * @unauthenticated
+     *
+     * @apiResource App\Http\Resources\PublisherResource
+     * @apiResourceModel App\Models\Publisher
+     *
+     * @response 404 {"message":"No query results for model [App\\Models\\Publisher]."}
      */
     public function show(Publisher $publisher)
     {
@@ -58,7 +83,18 @@ class PublisherController extends Controller
     }
 
     /**
+     * Update a publisher
+     *
      * @authenticated
+     *
+     * @bodyParam name string Publisher's name (max 255). Example: Bompiani
+     * @bodyParam country string Publisher's country (max 255). Example: IT
+     * @bodyParam website string Website URL (max 255). Example: https://www.bompiani.it
+     *
+     * @apiResource App\Http\Resources\PublisherResource
+     * @apiResourceModel App\Models\Publisher
+     *
+     * @response 403 {"message":"This action is unauthorized."}
      */
     public function update(Request $request, Publisher $publisher)
     {
@@ -76,7 +112,14 @@ class PublisherController extends Controller
     }
 
     /**
+     * Delete a publisher
+     *
+     * Fails with 422 if the publisher still has books.
+     *
      * @authenticated
+     *
+     * @response 204 {}
+     * @response 422 scenario="Publisher has books" {"message":"Cannot delete a publisher that has books."}
      */
     public function destroy(Publisher $publisher)
     {

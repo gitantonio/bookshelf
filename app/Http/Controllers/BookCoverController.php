@@ -23,7 +23,18 @@ class BookCoverController extends Controller
     }
 
     /**
+     * Upload a book cover
+     *
+     * Replaces the existing cover if one is present.
+     *
      * @authenticated
+     *
+     * @bodyParam cover file required Image file (jpg, jpeg, png or webp). Max 2MB, min 200x300px.
+     *
+     * @apiResource App\Http\Resources\BookResource
+     * @apiResourceModel App\Models\Book with=author,genres
+     *
+     * @response 422 scenario="Invalid image" {"message":"The cover must be an image.","errors":{"cover":["The cover must be an image."]}}
      */
     public function store(Request $request, Book $book)
     {
@@ -55,7 +66,14 @@ class BookCoverController extends Controller
     }
 
     /**
+     * Delete a book cover
+     *
+     * Returns 204 even if no cover was set.
+     *
      * @authenticated
+     *
+     * @response 204 {}
+     * @response 403 {"message":"This action is unauthorized."}
      */
     public function destroy(Request $request, Book $book)
     {
